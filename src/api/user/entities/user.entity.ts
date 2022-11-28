@@ -1,32 +1,33 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { UserRole } from '../user.enum';
 
 @Entity('users')
 export class User extends BaseEntity {
 
   @PrimaryGeneratedColumn('increment')
-  public id: number;
+  id: number;
 
-  @Column()
-  public name: string;
+  @Column({ type: 'varchar' })
+  name: string;
 
-  @Column()
-  public lastname: string;
+  @Column({ unique: true, type: 'varchar' })
+  email: string;
 
-  @Column({ unique: true })
-  public email: string;
+  @Column({ nullable: true, type: 'varchar' })
+  phone: string | null;
 
-  @Column()
-  public password: string;
+  @Column({ type: 'varchar' })
+  password: string;
 
-  @Column({ nullable: true })
-  public city: string | null;
+  @Column({ type: 'varchar', nullable: true })
+  avatar: string | null;
 
-  @Column({ nullable: true })
-  public address: string | null;
+  @Column({ enum: UserRole, default: UserRole.Customer })
+  role: UserRole;
 
-  @Column({ name: 'date_of_birth', nullable: true })
-  public dateOfBirth: Date | null;
+  @CreateDateColumn()
+  createdAt: Date;
 
-  @Column({ name: 'is_admin' })
-  public isAdmin: boolean;
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
