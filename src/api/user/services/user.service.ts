@@ -24,8 +24,17 @@ export class UserService {
     return this.usersRepo.findOneBy({ email });
   }
 
-  async remove(id: number): Promise<void> {
-    await this.usersRepo.delete(id);
+  async remove(id: number) {
+    const userDelete = await this.usersRepo.delete(id);
+    return { message: 'Se ha eliminado correctamente', userDelete };
+  }
+
+  async createUserAdmin(body: CreateUserDto) {
+    const saltOrRounds = 10;
+    const password = body.password;
+    const hash = await bcrypt.hash(password, saltOrRounds);
+
+    return this.usersRepo.save({ ...body, password: hash })
   }
 
   async create(body: CreateUserDto) {

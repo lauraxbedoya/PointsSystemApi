@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsEnum, IsNumberString, ValidateIf, NotEquals, IsOptional, IsEmail, IsString, MinLength, Validate } from 'class-validator';
+import { IsNotEmpty, IsEnum, IsNumberString, ValidateIf, NotEquals, IsOptional, IsEmail, IsString, MinLength, Validate, isNotEmpty } from 'class-validator';
 import { UniqueFields } from './unique-fields.guard';
 import { UserRole } from './user.enum';
 
@@ -65,6 +65,7 @@ export class CreateUserDto {
   avatar: string;
 
   @IsEnum(UserRole)
+  @IsOptional()
   @IsNotEmpty()
   role: UserRole;
 }
