@@ -5,6 +5,8 @@ import { User } from './api/user/entities/user.entity';
 import { UsersModule } from './api/user/user.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ProductModule } from './api/product/product.module';
+import { Product } from './api/product/entities/product.entity';
 
 @Module({
   controllers: [AppController],
@@ -17,11 +19,12 @@ import { AppService } from './app.service';
       username: 'postgres',
       password: 'postgres',
       database: 'points_system',
-      entities: [User],
+      entities: [User, Product],
       synchronize: true,
     }),
     UsersModule,
     AuthModule,
+    ProductModule,
   ],
 })
 export class AppModule { }

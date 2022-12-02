@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsEnum, IsNumberString, ValidateIf, NotEquals, IsOptional, IsEmail, IsString, MinLength, Validate, isNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsEnum, IsNumberString, ValidateIf, NotEquals, IsOptional, IsEmail, IsString, MinLength, Validate } from 'class-validator';
 import { UniqueFields } from './unique-fields.guard';
 import { UserRole } from './user.enum';
 
@@ -9,7 +9,7 @@ export class UpdateUserDto {
   @ValidateIf((object, value) => value !== undefined)
   name: string;
 
-  @IsString({ message: 'debe ser string' })
+  @IsString({ message: 'Debe ser string' })
   @IsEmail()
   @ValidateIf((object, value) => value !== undefined)
   @NotEquals(null)

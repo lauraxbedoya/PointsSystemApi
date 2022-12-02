@@ -25,8 +25,8 @@ export class UserService {
   }
 
   async remove(id: number) {
-    const userDelete = await this.usersRepo.delete(id);
-    return { message: 'Se ha eliminado correctamente', userDelete };
+    const userDeleted = await this.usersRepo.delete(id);
+    return { message: 'Se ha eliminado correctamente', userDeleted };
   }
 
   async createUserAdmin(body: CreateUserDto) {
