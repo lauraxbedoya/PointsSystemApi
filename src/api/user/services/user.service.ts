@@ -4,12 +4,15 @@ import { Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto, UpdateUserDto } from '../user.dto';
+import { GoogleDriveService } from 'src/googleDriveService';
+import path from 'path';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private usersRepo: Repository<User>,
+    private googleDriveService: GoogleDriveService,
   ) { }
 
   findAll() {

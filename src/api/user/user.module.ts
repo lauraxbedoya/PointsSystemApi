@@ -1,5 +1,6 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { GoogleDriveService } from 'src/googleDriveService';
 import { AuthModule } from './auth/auth.module';
 import { JwtStrategy } from './auth/jwt.strategy';
 import { UserController } from './controllers/user.controller';
@@ -10,7 +11,7 @@ import { UniqueFields } from './unique-fields.guard';
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]), forwardRef(() => AuthModule)],
-  providers: [UserService, UniqueFields, JwtStrategy],
+  providers: [UserService, UniqueFields, JwtStrategy, GoogleDriveService],
   controllers: [UserController],
   exports: [UserService]
 })

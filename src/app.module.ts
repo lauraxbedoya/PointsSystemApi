@@ -7,21 +7,30 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ProductModule } from './api/product/product.module';
 import { Product } from './api/product/entities/product.entity';
+import { ConfigService, ConfigModule } from '@nestjs/config';
 
 @Module({
   controllers: [AppController],
   providers: [AppService],
-  imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 4321,
-      username: 'postgres',
-      password: 'postgres',
-      database: 'points_system',
-      entities: [User, Product],
-      synchronize: true,
-    }),
+  imports: [ConfigModule.forRoot({
+    isGlobal: true
+  }),
+  TypeOrmModule.forRootAsync({
+    useFactory: async (config: ConfigService) => {
+
+      return {
+        type: 'postgres',
+        host: config.get('DB_HOST'),
+        port: +config.get('DB_PORT'),
+        username: config.get('DB_USERNAME'),
+        password: config.get('DB_PASSWORD'),
+        database: config.get('DB_NAME'),
+        entities: [User, Product],
+        synchronize: true,
+      }
+    },
+    inject: [ConfigService]
+  }),
     UsersModule,
     AuthModule,
     ProductModule,
