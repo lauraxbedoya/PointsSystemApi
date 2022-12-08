@@ -1,14 +1,21 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
+import { GoogleDriveService } from 'src/googleDriveService';
 import { Repository } from 'typeorm';
 import { Product } from '../entities/product.entity';
+import { ProductImage } from '../entities/product_images.entity';
 import { CreateProductDto, UpdateProductDto } from '../product.dto';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(Product)
-    private productsRepo: Repository<Product>
+    private productsRepo: Repository<Product>,
+    @InjectRepository(ProductImage)
+    private imgsProductRepo: Repository<ProductImage>,
+    private gDriveService: GoogleDriveService,
+    private configService: ConfigService,
   ) { }
 
   findAll() {
@@ -24,8 +31,21 @@ export class ProductService {
     return { message: 'El producto ha sido elimado correctamente', productDeleted }
   }
 
-  create(body: CreateProductDto) {
-    return this.productsRepo.save(body)
+  async create(body: CreateProductDto, file: Express.Multer.File) {
+    const newProduct = await this.productsRepo.save(body);
+    const productId = newProduct.id;
+    const respImg = await this.gDriveService.saveFile(file, `product-${productId}`, this.configService.get('GOOGLE_NAME_FOLDER_PRODUCT'))
+
+    const imageId = respImg.data.id;
+    const product = await this.productsRepo.findOneBy({ id: productId });
+    if (!product) {
+      throw new NotFoundException("stock not founded");
+    }
+    const newImage = new ProductImage();
+    newImage.product = product;
+    newImage.productId = productId;
+    const resp = this.imgsProductRepo.save({ imageId, productId })
+    return { resp, body }
   }
 
   async update(id: number, body: UpdateProductDto) {

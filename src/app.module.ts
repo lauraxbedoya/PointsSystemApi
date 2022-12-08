@@ -8,6 +8,7 @@ import { AppService } from './app.service';
 import { ProductModule } from './api/product/product.module';
 import { Product } from './api/product/entities/product.entity';
 import { ConfigService, ConfigModule } from '@nestjs/config';
+import { ProductImage } from './api/product/entities/product_images.entity';
 
 @Module({
   controllers: [AppController],
@@ -25,7 +26,7 @@ import { ConfigService, ConfigModule } from '@nestjs/config';
         username: config.get('DB_USERNAME'),
         password: config.get('DB_PASSWORD'),
         database: config.get('DB_NAME'),
-        entities: [User, Product],
+        entities: [User, Product, ProductImage],
         synchronize: true,
       }
     },

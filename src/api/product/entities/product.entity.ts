@@ -1,4 +1,5 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { ProductImage } from "./product_images.entity";
 
 @Entity('products')
 export class Product extends BaseEntity {
@@ -26,4 +27,7 @@ export class Product extends BaseEntity {
 
   @UpdateDateColumn()
   updatedAt: Date
+
+  @OneToMany(() => ProductImage, (image) => image.product)
+  productImages: ProductImage[]
 }

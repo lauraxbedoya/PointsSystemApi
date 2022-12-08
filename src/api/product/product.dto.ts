@@ -1,3 +1,4 @@
+import { Transform, TransformFnParams, Type } from "class-transformer";
 import { IsInt, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class CreateProductDto {
@@ -6,7 +7,9 @@ export class CreateProductDto {
   @IsNotEmpty()
   name: string;
 
-  @IsInt()
+  @Type(() => Number)
+  @IsNumber()
+  @Transform(({ value }: TransformFnParams) => parseInt(value))
   @IsNotEmpty()
   price: number;
 
@@ -14,11 +17,15 @@ export class CreateProductDto {
   @IsOptional()
   description: string;
 
+  @Type(() => Number)
   @IsNumber()
+  @Transform(({ value }: TransformFnParams) => parseInt(value))
   @IsNotEmpty()
   creditsToGive: number;
 
+  @Type(() => Number)
   @IsNumber()
+  @Transform(({ value }: TransformFnParams) => parseInt(value))
   @IsNotEmpty()
   creditsToBuy: number;
 }
