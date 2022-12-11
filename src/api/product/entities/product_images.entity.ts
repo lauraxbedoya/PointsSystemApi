@@ -8,15 +8,15 @@ export class ProductImage {
   public id: number;
 
   @Column({ nullable: false })
-  public imageId: string
+  public imageId: string;
 
   @Column()
-  public productId: number
+  public productId: number;
 
   @ManyToOne(() => Product, (product) => product.productImages)
   @JoinColumn({ name: 'productId' })
-  product: Product
+  product: Product;
 
   @CreateDateColumn()
-  createdAt: Date
+  createdAt: Date;
 }

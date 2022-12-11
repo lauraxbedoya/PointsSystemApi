@@ -45,5 +45,4 @@ export class ProductController {
     return this.productService.update(id, body)
   }
 }
-
 //hcer un for de tantas imagenes hayan

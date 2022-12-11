@@ -39,7 +39,7 @@ export class ProductService {
     const imageId = respImg.data.id;
     const product = await this.productsRepo.findOneBy({ id: productId });
     if (!product) {
-      throw new NotFoundException("stock not founded");
+      throw new NotFoundException("product not founded");
     }
     const newImage = new ProductImage();
     newImage.product = product;
