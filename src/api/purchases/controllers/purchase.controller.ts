@@ -7,21 +7,24 @@ import { RolesGuard } from 'src/api/user/guards/roles.guard';
 import { UserRole } from 'src/api/user/user.enum';
 import { CreatePurchaseDto } from '../purchase.dto';
 import { UserExistGuard } from 'src/api/user/guards/user-exist.guard';
+import { CreditsService } from 'src/api/credits/services/credits.service';
 
 @Controller('purchase')
 export class PurchaseController {
   constructor(
-    private purchaseService: PurchaseService
+    private purchaseService: PurchaseService,
+    private creditsService: CreditsService
   ) { }
 
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard, UserExistGuard)
-  @Roles(UserRole.Staff, UserRole.Admin, UserRole.SuperAdmin)
+  @Roles(UserRole.Staff, UserRole.Admin, UserRole.SuperAdmin, UserRole.Customer)
   @SetUserExistKeyName('userId')
   create(@Body() body: CreatePurchaseDto) {
     return this.purchaseService.create(body)
   }
 }
-//crear un guard para la validacion de si existe un usuario, mirar si en el body o params esta el usuario
+
+//crear el purchase, con el purchase id creee las ordenes (services) con lo que llega de las orders actualice los usercredits del ususario
 
 

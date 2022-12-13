@@ -11,13 +11,13 @@ export class PurchaseService {
     @InjectRepository(Purchases)
     private purchaseRepo: Repository<Purchases>,
     @InjectRepository(User)
-    private userRepo: Repository<User>
+    private userRepo: Repository<User>,
   ) { }
 
   async create(body: CreatePurchaseDto) {
     const user = await this.userRepo.findOneBy({ id: body.userId });
     if (!user) {
-      throw new NotFoundException("user not founded");
+      throw new NotFoundException("user not found");
     }
     return this.purchaseRepo.save(body)
   }

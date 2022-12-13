@@ -11,6 +11,8 @@ import { ConfigService, ConfigModule } from '@nestjs/config';
 import { ProductImage } from './api/product/entities/product_images.entity';
 import { Purchases } from './api/purchases/entities/purchase.entity';
 import { PurchaseModule } from './api/purchases/purchase.module';
+import { OrderModule } from './api/credits/credits.module';
+import { Credits } from './api/credits/entities/user_credits.entity';
 
 @Module({
   controllers: [AppController],
@@ -28,7 +30,7 @@ import { PurchaseModule } from './api/purchases/purchase.module';
         username: config.get('DB_USERNAME'),
         password: config.get('DB_PASSWORD'),
         database: config.get('DB_NAME'),
-        entities: [User, Product, ProductImage, Purchases],
+        entities: [User, Product, ProductImage, Purchases, Credits],
         synchronize: true,
       }
     },
@@ -38,6 +40,7 @@ import { PurchaseModule } from './api/purchases/purchase.module';
     AuthModule,
     ProductModule,
     PurchaseModule,
+    OrderModule,
   ],
 })
 export class AppModule { }

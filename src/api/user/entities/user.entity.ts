@@ -1,5 +1,6 @@
+import { Credits } from 'src/api/credits/entities/user_credits.entity';
 import { Purchases } from 'src/api/purchases/entities/purchase.entity';
-import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { UserRole } from '../user.enum';
 
 @Entity('users')
@@ -34,4 +35,7 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Purchases, (purchase) => purchase.user)
   purchases: Purchases;
+
+  @OneToOne(() => Credits)
+  credits: Credits
 }
