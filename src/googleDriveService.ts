@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { google } from 'googleapis';
 import * as stream from 'stream';
 import { ConfigService } from '@nestjs/config';
+import * as path from 'path';
 
 type PartialDriveFile = {
   id: string;
@@ -24,14 +25,23 @@ export class GoogleDriveService {
   }
 
   createDriveClient() {
-    const client = new google.auth.OAuth2(this.configService.get('GOOGLE_DRIVE_CLIENT_ID'), this.configService.get('GOOGLE_DRIVE_CLIENT_SECRET'), this.configService.get('GOOGLE_DRIVE_REDIRECT_URI'));
+    // const client = new google.auth.OAuth2(this.configService.get('GOOGLE_DRIVE_CLIENT_ID'), this.configService.get('GOOGLE_DRIVE_CLIENT_SECRET'), this.configService.get('GOOGLE_DRIVE_REDIRECT_URI'));
 
-    client.setCredentials({ refresh_token: this.configService.get('GOOGLE_DRIVE_REFRESH_TOKEN') });
+    // client.setCredentials({ refresh_token: this.configService.get('GOOGLE_DRIVE_REFRESH_TOKEN') });
 
-    return google.drive({
-      version: 'v3',
-      auth: client,
+    // return google.drive({
+    //   version: 'v3',
+    //   auth: client,
+    // });
+    const KEYFILEPATH = path.join(__dirname, '/../points-system-370623-6768d795c897.json');
+    const SCOPES = ['https://www.googleapis.com/auth/drive'];
+
+    const auth = new google.auth.GoogleAuth({
+      keyFile: KEYFILEPATH,
+      scopes: SCOPES,
     });
+    const driveService = google.drive({ version: 'v3', auth });
+    return driveService;
   }
 
   createFolder(folderName: string): Promise<PartialDriveFile> {

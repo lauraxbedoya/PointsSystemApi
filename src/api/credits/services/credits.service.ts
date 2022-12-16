@@ -1,24 +1,28 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateUserCreditsDto } from '../credits.dto';
-import { Credits } from '../entities/user_credits.entity';
+import { UserCredits } from '../entities/user_credits.entity';
 
 @Injectable()
-export class CreditsService {
+export class UserCreditsService {
   constructor(
-    @InjectRepository(Credits)
-    private creditsRepo: Repository<Credits>
+    @InjectRepository(UserCredits)
+    private creditsRepo: Repository<UserCredits>
   ) { }
 
-  async create(newUserCredits: CreateUserCreditsDto) {
-    const userCredits = await this.creditsRepo.findOneBy({ userId: newUserCredits.userId });
+  async assignCredits(newUserCredits: number[], userId: number, boughtWithCredits: number) {
+    const userCredits = await this.creditsRepo.findOneBy({ userId });
+
+    const totalCredits = newUserCredits.reduce((prev, curr) => prev + curr, 0);
+
     if (!userCredits) {
-      this.creditsRepo.save(newUserCredits)
+      return this.creditsRepo.save({
+        userId,
+        credits: totalCredits
+      })
     } else {
-      userCredits.credits += newUserCredits.credits;
+      userCredits.credits = !boughtWithCredits ? userCredits.credits + totalCredits : userCredits.credits - boughtWithCredits;
       return this.creditsRepo.save(userCredits)
     }
-    return userCredits
   }
 }

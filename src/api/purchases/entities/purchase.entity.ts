@@ -1,9 +1,10 @@
 import { IsOptional } from "class-validator";
+import { Order } from "src/api/orders/entities/order.entity";
 import { User } from "src/api/user/entities/user.entity";
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('purchases')
-export class Purchases extends BaseEntity {
+export class Purchase extends BaseEntity {
 
   @PrimaryGeneratedColumn('increment')
   id: number;
@@ -21,4 +22,7 @@ export class Purchases extends BaseEntity {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @OneToMany(() => Order, (order) => order.purchase)
+  orders: Order[]
 }

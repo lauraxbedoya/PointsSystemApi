@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsOptional } from "class-validator";
+import { IsArray, IsNotEmpty, IsNumber, IsOptional } from "class-validator";
 
 export class CreatePurchaseDto {
 
@@ -9,6 +9,21 @@ export class CreatePurchaseDto {
   @IsNumber()
   @IsOptional()
   boughtWithCredits: number;
+
+  @IsArray()
+  @IsOptional()
+  orders: OrderDto[];
+}
+
+export class OrderDto {
+
+  @IsNumber()
+  @IsOptional()
+  productId: number
+
+  @IsNumber()
+  @IsOptional()
+  amount: number
 }
 
 //order: Order[] => vaya guardando producto y cantidad dto

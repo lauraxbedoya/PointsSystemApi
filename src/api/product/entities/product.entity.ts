@@ -1,3 +1,4 @@
+import { Order } from "src/api/orders/entities/order.entity";
 import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { ProductImage } from "./product_images.entity";
 
@@ -10,7 +11,7 @@ export class Product extends BaseEntity {
   @Column({ type: 'varchar' })
   name: string
 
-  @Column({ type: 'money' })
+  @Column({ type: 'integer' })
   price: number
 
   @Column({ type: 'text', nullable: true })
@@ -30,4 +31,7 @@ export class Product extends BaseEntity {
 
   @OneToMany(() => ProductImage, (image) => image.product)
   productImages: ProductImage[]
+
+  @OneToMany(() => Order, (order) => order.product)
+  orders: Order[]
 }

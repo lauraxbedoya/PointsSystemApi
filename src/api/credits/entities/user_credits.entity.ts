@@ -2,7 +2,7 @@ import { User } from "src/api/user/entities/user.entity";
 import { BaseEntity, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('user_credits')
-export class Credits extends BaseEntity {
+export class UserCredits extends BaseEntity {
 
   @Column({ unique: true })
   @PrimaryGeneratedColumn('increment')

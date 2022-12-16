@@ -9,10 +9,11 @@ import { ProductModule } from './api/product/product.module';
 import { Product } from './api/product/entities/product.entity';
 import { ConfigService, ConfigModule } from '@nestjs/config';
 import { ProductImage } from './api/product/entities/product_images.entity';
-import { Purchases } from './api/purchases/entities/purchase.entity';
+import { Purchase } from './api/purchases/entities/purchase.entity';
 import { PurchaseModule } from './api/purchases/purchase.module';
-import { OrderModule } from './api/credits/credits.module';
-import { Credits } from './api/credits/entities/user_credits.entity';
+import { UserCredits } from './api/credits/entities/user_credits.entity';
+import { OrderModule } from './api/orders/order.module';
+import { Order } from './api/orders/entities/order.entity';
 
 @Module({
   controllers: [AppController],
@@ -30,7 +31,7 @@ import { Credits } from './api/credits/entities/user_credits.entity';
         username: config.get('DB_USERNAME'),
         password: config.get('DB_PASSWORD'),
         database: config.get('DB_NAME'),
-        entities: [User, Product, ProductImage, Purchases, Credits],
+        entities: [User, Product, ProductImage, Purchase, UserCredits, Order],
         synchronize: true,
       }
     },
