@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/api/user/auth/jwt-auth.guard';
 import { PurchaseService } from 'src/api/purchases/services/purchase.service';
 import { SetUserExistKeyName } from 'src/api/user/decorators/setUserExistKeyName.decorator';
@@ -25,13 +25,18 @@ export class PurchaseController {
   @Roles(UserRole.Staff, UserRole.Admin, UserRole.SuperAdmin, UserRole.Customer)
   @SetUserExistKeyName('userId')
   async create(@Body() body: CreatePurchaseDto, @UserData() user: User) {
+
+    const haveUserEnoughCreditsToBuy = await this.userCreditsService.haveUserEnoughCreditsToBuy(body.orders, body.userId);
+    if (!haveUserEnoughCreditsToBuy) {
+      throw new BadRequestException("El usuario no tiene creditos suficientes para esta compra");
+    }
+
     const purchase = await this.purchaseService.create(body);
 
-    const creditsToGive = await this.orderService.create(body.orders, Boolean(body.boughtWithCredits), purchase.id, user.id);
+    const newOrders = await this.orderService.create(body.orders, Boolean(body.boughtWithCredits), purchase.id, user.id);
 
-    const userCredits = await this.userCreditsService.assignCredits(creditsToGive, body.userId, body.boughtWithCredits);
+    await this.userCreditsService.assignCredits(newOrders, body.userId, body.boughtWithCredits);
 
-    console.log({ purchase, creditsToGive, userCredits });
+    return { ...purchase, orders: newOrders };
   }
 }
-

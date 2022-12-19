@@ -14,8 +14,8 @@ export class OrderService {
     private productRepo: Repository<Product>
   ) { }
 
-  async create(orders: OrderDto[], isBoughtWithCredits: boolean, purchaseId: number, userId: number) {
-    const credits = [];
+  async create(orders: OrderDto[], isBoughtWithCredits: boolean, purchaseId: number, userId: number): Promise<Order[]> {
+    const newOrders = [];
 
     for (const order of orders) {
       const product = await this.productRepo.findOneBy({ id: order.productId });
@@ -28,9 +28,9 @@ export class OrderService {
       newOrder.createdById = userId;
       const orderCreated = await this.ordersRepo.save(newOrder);
       if (orderCreated.creditsGiven > 0) {
-        credits.push(orderCreated.creditsGiven);
+        newOrders.push(orderCreated);
       }
     }
-    return credits;
+    return newOrders;
   }
 }

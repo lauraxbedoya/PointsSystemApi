@@ -5,13 +5,13 @@ import { Product } from "./product.entity";
 export class ProductImage {
 
   @PrimaryGeneratedColumn('increment')
-  public id: number;
+  id: number;
 
   @Column({ nullable: false })
-  public imageId: string;
+  imageId: string;
 
   @Column()
-  public productId: number;
+  productId: number;
 
   @ManyToOne(() => Product, (product) => product.productImages)
   @JoinColumn({ name: 'productId' })
